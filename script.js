@@ -58,7 +58,7 @@ if (saved) {
 function renderTasks(filter = '') {
     taskList.innerHTML = '';
     const filtered = tasks.filter(task =>
-        task.toLowerCase().includes(filter.toLowerCase())
+        task.name.toLowerCase().includes(filter.toLowerCase())
     );
     if (filtered.length === 0) {
         taskList.innerHTML = '<p style="color:#888;">No tasks found.</p>';
@@ -66,21 +66,41 @@ function renderTasks(filter = '') {
     }
     filtered.forEach((task, idx) => {
         const card = document.createElement('div');
+        card.id = task.id;
         card.className = 'task-card';
         card.style = 'background:#fff;border-radius:6px;box-shadow:0 2px 8px #0001;padding:1rem;margin-bottom:1rem;display:flex;align-items:center;justify-content:space-between;gap:1rem;';
 
+        // Checkbox
+        const checkbox = document.createElement('input');
+        checkbox.id = task.id + '-checkbox';
+        checkbox.type = 'checkbox';
+        checkbox.checked = task.done;
+        checkbox.onchange = () => {
+            tasks[idx].done = checkbox.checked;
+            saveTasks();
+            renderTasks(filter);
+        };
+
         const text = document.createElement('span');
-        text.textContent = task;
+        text.textContent = task.name;
         text.style = 'flex:1;';
+        if (task.done) {
+            text.style.textDecoration = 'line-through';
+            text.style.color = '#777';
+        }
 
         const editBtn = document.createElement('button');
         editBtn.textContent = 'Edit';
         editBtn.className = 'btn';
         editBtn.style = 'background:#2196f3;margin-right:0.5rem;';
         editBtn.onclick = () => {
-            const newTask = prompt('Edit task:', task);
+            const newTask = prompt('Edit task:', task.name);
             if (newTask && newTask.trim()) {
-                tasks[idx] = newTask.trim();
+                tasks[idx] = {
+                    id: task.id,
+                    name: newTask.trim(),
+                    done: task.done
+                };
                 saveTasks();
                 renderTasks();
             }
@@ -98,6 +118,7 @@ function renderTasks(filter = '') {
             }
         };
 
+        card.appendChild(checkbox);
         card.appendChild(text);
         card.appendChild(editBtn);
         card.appendChild(delBtn);
@@ -113,7 +134,12 @@ taskForm.addEventListener('submit', e => {
         setTimeout(() => (taskInput.style.borderColor = ''), 1000);
         return;
     }
-    tasks.push(value);
+    const _id = value.toLowerCase().split(' ').join('-');
+    tasks.push({
+        id: _id,
+        name: value,
+        done: false
+    });
     saveTasks();
     taskInput.value = '';
     renderTasks();
