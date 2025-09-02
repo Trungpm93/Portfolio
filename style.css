@@ -9,6 +9,7 @@ header {
   background: #222;
   color: #fff;
   padding: 1rem 0;
+  animation: fadeInDown 1s;
 }
 nav ul {
   display: flex;
@@ -26,6 +27,7 @@ nav a {
 }
 nav a:hover {
   color: #ff9800;
+  text-shadow: 0 2px 8px #ff980044;
 }
 main {
   max-width: 900px;
@@ -40,6 +42,37 @@ section {
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.05);
   padding: 2rem;
+  transition: box-shadow 0.3s, transform 0.3s;
+}
+section:hover {
+  box-shadow: 0 6px 24px rgba(0,0,0,0.12);
+  transform: translateY(-4px) scale(1.02);
+}
+/* Button style example */
+.btn {
+  display: inline-block;
+  background: #ff9800;
+  color: #fff;
+  padding: 0.5rem 1.2rem;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.3s, transform 0.3s;
+}
+.btn:hover {
+  background: #e67c00;
+  transform: scale(1.08);
+}
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 footer {
   background: #222;
@@ -60,4 +93,24 @@ footer {
   nav ul {
     gap: 1rem;
   }
+}
+body.dark-mode {
+  background: #181a1b;
+  color: #eee;
+}
+body.dark-mode header,
+body.dark-mode footer {
+  background: #111;
+  color: #ff9800;
+}
+body.dark-mode section {
+  background: #222;
+  color: #eee;
+}
+body.dark-mode nav a {
+  color: #ff9800;
+}
+body.dark-mode nav a:hover {
+  color: #fff;
+  text-shadow: 0 2px 8px #fff2;
 }
