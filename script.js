@@ -40,3 +40,83 @@ navLinks.forEach(link => {
         }
     });
 });
+
+// --- Task Tracker ---
+const taskForm = document.getElementById('task-form');
+const taskInput = document.getElementById('task-input');
+const taskList = document.getElementById('task-list');
+let tasks = [];
+// Load tasks from localStorage
+const TASKS_KEY = 'portfolio_tasks';
+const saved = localStorage.getItem(TASKS_KEY);
+if (saved) {
+    try {
+        tasks = JSON.parse(saved);
+    } catch { }
+}
+
+function renderTasks() {
+    taskList.innerHTML = '';
+    if (tasks.length === 0) {
+        taskList.innerHTML = '<p style="color:#888;">No tasks yet.</p>';
+        return;
+    }
+    tasks.forEach((task, idx) => {
+        const card = document.createElement('div');
+        card.className = 'task-card';
+        card.style = 'background:#fff;border-radius:6px;box-shadow:0 2px 8px #0001;padding:1rem;margin-bottom:1rem;display:flex;align-items:center;justify-content:space-between;gap:1rem;';
+
+        const text = document.createElement('span');
+        text.textContent = task;
+        text.style = 'flex:1;';
+
+        const editBtn = document.createElement('button');
+        editBtn.textContent = 'Edit';
+        editBtn.className = 'btn';
+        editBtn.style = 'background:#2196f3;margin-right:0.5rem;';
+        editBtn.onclick = () => {
+            const newTask = prompt('Edit task:', task);
+            if (newTask && newTask.trim()) {
+                tasks[idx] = newTask.trim();
+                saveTasks();
+                renderTasks();
+            }
+        };
+
+        const delBtn = document.createElement('button');
+        delBtn.textContent = 'Delete';
+        delBtn.className = 'btn';
+        delBtn.style = 'background:#f44336;';
+        delBtn.onclick = () => {
+            if (confirm('Delete this task?')) {
+                tasks.splice(idx, 1);
+                saveTasks();
+                renderTasks();
+            }
+        };
+
+        card.appendChild(text);
+        card.appendChild(editBtn);
+        card.appendChild(delBtn);
+        taskList.appendChild(card);
+    });
+}
+
+taskForm.addEventListener('submit', e => {
+    e.preventDefault();
+    const value = taskInput.value.trim();
+    if (!value) {
+        taskInput.style.borderColor = '#f44336';
+        setTimeout(() => (taskInput.style.borderColor = ''), 1000);
+        return;
+    }
+    tasks.push(value);
+    saveTasks();
+    taskInput.value = '';
+    renderTasks();
+});
+
+function saveTasks() {
+    localStorage.setItem(TASKS_KEY, JSON.stringify(tasks));
+}
+renderTasks();
