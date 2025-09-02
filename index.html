@@ -63,16 +63,28 @@
       </section>
       <section id="tasks">
         <h2>Task Tracker</h2>
-        <form id="task-form" autocomplete="off" style="margin-bottom: 1rem">
+        <div style="display: flex">
+          <form
+            id="task-form"
+            autocomplete="off"
+            style="margin-bottom: 1rem; width: 70%"
+          >
+            <input
+              type="text"
+              id="task-input"
+              placeholder="Enter a new task..."
+              required
+              style="padding: 0.5rem; max-width: 300px"
+            />
+            <button type="submit" class="btn">Add Task</button>
+          </form>
           <input
             type="text"
-            id="task-input"
-            placeholder="Enter a new task..."
-            required
-            style="padding: 0.5rem; width: 60%; max-width: 300px"
+            id="task-search"
+            placeholder="Search tasks..."
+            style="margin-bottom: 1rem; width: 30%"
           />
-          <button type="submit" class="btn">Add Task</button>
-        </form>
+        </div>
         <div id="task-list"></div>
       </section>
       <section id="contact">

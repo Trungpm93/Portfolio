@@ -55,13 +55,16 @@ if (saved) {
     } catch { }
 }
 
-function renderTasks() {
+function renderTasks(filter = '') {
     taskList.innerHTML = '';
-    if (tasks.length === 0) {
-        taskList.innerHTML = '<p style="color:#888;">No tasks yet.</p>';
+    const filtered = tasks.filter(task =>
+        task.toLowerCase().includes(filter.toLowerCase())
+    );
+    if (filtered.length === 0) {
+        taskList.innerHTML = '<p style="color:#888;">No tasks found.</p>';
         return;
     }
-    tasks.forEach((task, idx) => {
+    filtered.forEach((task, idx) => {
         const card = document.createElement('div');
         card.className = 'task-card';
         card.style = 'background:#fff;border-radius:6px;box-shadow:0 2px 8px #0001;padding:1rem;margin-bottom:1rem;display:flex;align-items:center;justify-content:space-between;gap:1rem;';
@@ -119,4 +122,10 @@ taskForm.addEventListener('submit', e => {
 function saveTasks() {
     localStorage.setItem(TASKS_KEY, JSON.stringify(tasks));
 }
+
+// Listen for typing in search box
+const searchInput = document.getElementById('task-search');
+searchInput.addEventListener('input', () => {
+    renderTasks(searchInput.value);
+});
 renderTasks();
