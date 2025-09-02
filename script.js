@@ -45,6 +45,8 @@ navLinks.forEach(link => {
 const taskForm = document.getElementById('task-form');
 const taskInput = document.getElementById('task-input');
 const taskList = document.getElementById('task-list');
+const taskSearch = document.getElementById('task-search');
+const taskFilter = document.getElementById('task-filter');
 let tasks = [];
 // Load tasks from localStorage
 const TASKS_KEY = 'portfolio_tasks';
@@ -55,11 +57,29 @@ if (saved) {
     } catch { }
 }
 
+// Filter buttons
+let currentFilter = 'All';
+filterButtons = taskFilter.querySelectorAll('button');
+filterButtons.forEach(btn => {
+    btn.onclick = () => {
+        currentFilter = btn.textContent;
+        [...taskFilter.children].forEach(b => (b.style.background = ''));
+        btn.style.background = '#2196f3';
+        renderTasks(taskSearch.value);
+    }
+});
+
+
 function renderTasks(filter = '') {
     taskList.innerHTML = '';
-    const filtered = tasks.filter(task =>
+    let filtered = tasks.filter(task =>
         task.name.toLowerCase().includes(filter.toLowerCase())
     );
+    if (currentFilter === 'Active') {
+        filtered = filtered.filter(t => !t.done);
+    } else if (currentFilter === 'Done') {
+        filtered = filtered.filter(t => t.done);
+    }
     if (filtered.length === 0) {
         taskList.innerHTML = '<p style="color:#888;">No tasks found.</p>';
         return;
@@ -150,8 +170,7 @@ function saveTasks() {
 }
 
 // Listen for typing in search box
-const searchInput = document.getElementById('task-search');
-searchInput.addEventListener('input', () => {
-    renderTasks(searchInput.value);
+taskSearch.addEventListener('input', () => {
+    renderTasks(taskSearch.value);
 });
 renderTasks();

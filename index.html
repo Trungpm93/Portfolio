@@ -63,12 +63,8 @@
       </section>
       <section id="tasks">
         <h2>Task Tracker</h2>
-        <div style="display: flex">
-          <form
-            id="task-form"
-            autocomplete="off"
-            style="margin-bottom: 1rem; width: 70%"
-          >
+        <div style="display: flex; justify-content: space-between">
+          <form id="task-form" autocomplete="off" style="margin-bottom: 1rem">
             <input
               type="text"
               id="task-input"
@@ -78,11 +74,20 @@
             />
             <button type="submit" class="btn">Add Task</button>
           </form>
+          <div id="task-filter" style="margin-bottom: 1rem; display: flex">
+            <button
+              class="btn"
+              style="padding: 0.3rem 0.8rem; background: rgb(33, 150, 243)"
+            >
+              All</button
+            ><button class="btn" style="padding: 0.3rem 0.8rem">Active</button
+            ><button class="btn" style="padding: 0.3rem 0.8rem">Done</button>
+          </div>
           <input
             type="text"
             id="task-search"
             placeholder="Search tasks..."
-            style="margin-bottom: 1rem; width: 30%"
+            style="margin-bottom: 1rem"
           />
         </div>
         <div id="task-list"></div>
